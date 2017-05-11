@@ -15,10 +15,21 @@ $(document).ready(function() {
     });
   }
 
-  var thePresent = Date.now();
+
 
   function onSuccess(json) {
     for (var i = 0; i < json.features.length; i++) {
+      var thePresent = new Date();
+      var quakeTime = json.features[i].properties.time;
+      var timeSince = Math.floor((thePresent-quakeTime)/(60*60*1000));
+      if (timeSince === 1) {
+        var timeHolder = ' hour ago.'
+      } else if (timeSince === 0){
+        timeHolder = 'Happening now!'
+      } else {
+        timeHolder = ' hours ago.'
+      }
+      $('#info').append('When it happened: '+ timeSince + timeHolder);
       $('#info').append(`<p>`+json.features[i].properties.title+`</p>`);
       var allQuakes = {lat: json.features[i].geometry.coordinates[1], lng:json.features[i].geometry.coordinates[0]};
         var pin = new google.maps.Marker({
