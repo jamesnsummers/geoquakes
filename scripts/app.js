@@ -1,6 +1,6 @@
 // define globals
 var weekly_quakes_endpoint = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson";
-
+var map;
 $(document).ready(function() {
   console.log("Let's get coding!");
 
@@ -18,9 +18,8 @@ $(document).ready(function() {
 
   function onSuccess(json) {
     for (var i = 0; i < json.features.length; i++) {
-      $('#info').append(json.features[i].properties.title);
+      $('#info').append(`<p>`+json.features[i].properties.title+`</p>`);
     }
-
   }
 
   function onError(xhr, status, errorThrown) {
@@ -30,7 +29,21 @@ $(document).ready(function() {
     console.dir(xhr);
   }
 
+  function initMap() {
+    var latLng = {lat: 30.2682, lng: -97.74295};
+    // var firstQuake = {lat: json.features[0].geometry.coordinates[0], lng:json.features[0].geometry.coordinates[1]};
+    map = new google.maps.Map($('#map')[0], {
+      zoom: 4,
+      center: latLng
+    });
+    var pin = new google.maps.Marker({
+    position: latLng,
+    map: map
+  });
+  }
+
   getQuakes();
+  initMap();
 
 });
 
@@ -41,3 +54,5 @@ $(document).ready(function() {
 // console.log(json.features[0].properties.time);
 // console.log(Date.now());
 // console.log(Date.now() - json.features[0].properties.time);
+
+// var latLng = {lat: json.features[0].geometry.coordinates[0], lng:json.features[0].geometry.coordinates[1]};
