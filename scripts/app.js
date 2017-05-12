@@ -30,16 +30,20 @@ $(document).ready(function() {
           timeHolder = ' hours ago, on '+quakeTime+'.'
         }
       $('#info').append('When it happened: '+ timeSince + timeHolder);
+
       var location = json.features[i].properties.title;
       var locationArr = location.split(" ");
-
-
       $('#info').append(`<p>Where it happened: `+locationArr.splice(6).join(" ")+`</p>`);
+
+      if (json.features[i].properties.mag >= 4) {
+          var newIcon = 'images/earthquake.png'
+      }
+
       var allQuakes = {lat: json.features[i].geometry.coordinates[1], lng:json.features[i].geometry.coordinates[0]};
         var pin = new google.maps.Marker({
         position: allQuakes,
         map: map,
-        icon: 'images/earthquake.png'
+        icon: newIcon
         });
     }
   }
