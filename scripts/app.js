@@ -17,8 +17,10 @@ $(document).ready(function() {
 
  var thePresent = Date.now();
 
+
  function onSuccess(json) {
     for (var i = 0; i < json.features.length; i++) {
+      $('#info').append(thePresent - json.features[i].properties.time);
       $('#info').append(`<p>`+json.features[i].properties.title+`</p>`);
       var allQuakes = {lat: json.features[i].geometry.coordinates[1], lng:json.features[i].geometry.coordinates[0]};
         var pin = new google.maps.Marker({
@@ -26,6 +28,7 @@ $(document).ready(function() {
         map: map,
         icon: 'images/earthquake.png'
         });
+
     }
   }
 
@@ -46,6 +49,11 @@ $(document).ready(function() {
  }
 
  getQuakes();
-  initMap();
+ initMap();
 
 });
+
+
+// console.log(json.features[0].properties.time);
+// console.log(Date.now());
+// console.log(Date.now() - json.features[0].properties.time);
