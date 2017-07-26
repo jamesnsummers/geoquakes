@@ -1,4 +1,38 @@
+html, body {
+  background: grey;
+}
+
 .container {
+  padding-bottom: 50px;
+}
+
+#map {
+  height: 600px;
+  margin-top: 20px;
+}
+
+.smallQuake {
+  color: yellow;
+}
+
+.mediumQuake {
+  color: blue;
+}
+
+.run {
+  color: white;
+}
+
+.marker {
+  height: 20px;
+  width: 20px;
+}
+
+#map img {
+  border-radius: 30px;
+}
+
+/*.container {
   padding-bottom: 50px;
 }
 
@@ -9,4 +43,4 @@
 
 .pin {
   height: 400px;
-}
+}*/

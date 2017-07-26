@@ -8,27 +8,41 @@ $(document).ready(function() {
  function getQuakes() {
     $.ajax({
       method: "GET",
-      url: weekly_quakes_endpoint,
+      url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson',
       data: $("form").serialize(),
       success: onSuccess,
       error: onError
     });
   }
 
- var thePresent = Date.now();
-
-
  function onSuccess(json) {
     for (var i = 0; i < json.features.length; i++) {
-      $('#info').append(thePresent - json.features[i].properties.time);
-      $('#info').append(`<p>`+json.features[i].properties.title+`</p>`);
+      var thePresent = new Date();
+      var quakeTime = new Date (json.features[i].properties.time);
+      var timeSince = Math.floor((thePresent-quakeTime)/(60*60*1000));
+        if (timeSince === 1) {
+          var timeHolder = ' hour ago, on '+quakeTime+'.'
+        } else if (timeSince === 0){
+          timeHolder = 'Happening now, on '+quakeTime+'!'
+        } else {
+          timeHolder = ' hours ago, on '+quakeTime+'.'
+        }
+      $('#info').append('When it happened: '+ timeSince + timeHolder);
+
+      var location = json.features[i].properties.title;
+      var locationArr = location.split(" ");
+      $('#info').append(`<p>Where it happened: `+locationArr.splice(6).join(" ")+`</p>`)
+
+      if (json.features[i].properties.mag >= 4) {
+        var newIcon = 'images/earthquake.png'
+      }
+
       var allQuakes = {lat: json.features[i].geometry.coordinates[1], lng:json.features[i].geometry.coordinates[0]};
         var pin = new google.maps.Marker({
         position: allQuakes,
         map: map,
-        icon: 'images/earthquake.png'
+        icon: newIcon
         });
-
     }
   }
 
@@ -52,8 +66,3 @@ $(document).ready(function() {
  initMap();
 
 });
-
-
-// console.log(json.features[0].properties.time);
-// console.log(Date.now());
-// console.log(Date.now() - json.features[0].properties.time);
